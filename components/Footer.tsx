@@ -24,7 +24,7 @@ const Footer = () => {
           </svg>
         </a>
         <a
-          href="https://github.com/Devildev07"
+          href="https://github.com/adityakarn47"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Aditya Kumar on GitHub"
