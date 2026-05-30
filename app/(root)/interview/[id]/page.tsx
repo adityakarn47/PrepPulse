@@ -1,0 +1,48 @@
+import Agent from "@/components/Agent";
+import DisplayTechIcons from "@/components/DisplayTechIcons";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import { getInterviewById } from "@/lib/actions/general.actions";
+import { getRandomInterviewCover } from "@/lib/utils";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+
+const page = async ({ params }: RouteParams) => {
+  const { id } = await params;
+  const user = await getCurrentUser();
+  const interview = await getInterviewById(id);
+  if (!interview) redirect("/");
+
+  return (
+    <>
+      <div className="flex flex-row gap-4 justify-between">
+        <div className="flex flex-row gap-4 items-center max-sm:flex-col">
+          <div className="flex flex-row gap-4 items-center">
+            <Image
+              src={getRandomInterviewCover()}
+              alt="calendar"
+              width={40}
+              height={40}
+              className="rounded-full object-cover size-[40px ]"
+            />
+            <h3 className="capitalize text-lg font-semibold">
+              {interview?.role} Interview
+            </h3>
+          </div>
+          <DisplayTechIcons techStack={interview?.techstack} />
+        </div>
+        <p className="text-sm text-muted-foreground bg-dark-200 rounded-md py-2 px-4 h-fit capitalize">
+          {interview?.type}
+        </p>
+      </div>
+      <Agent
+        userName={user?.name ?? "Guest"}
+        type="interview"
+        userId={user?.id}
+        interviewId={id}
+        questions={interview?.questions}
+      />
+    </>
+  );
+};
+
+export default page;
